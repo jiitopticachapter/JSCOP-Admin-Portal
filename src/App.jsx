@@ -8,7 +8,7 @@ import Whatsapp from "./pages/Whatsapp/Whatsapp";
 import Navbar from "./components/Navbar/Navbar";
 import { useState } from "react";
 const App = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   return (
     <>

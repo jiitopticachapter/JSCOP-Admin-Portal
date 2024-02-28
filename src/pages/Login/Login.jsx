@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "./Login.css";
+import axios from "axios";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleChangeUsername = (event) => {
     setUsername(event.target.value);
@@ -14,21 +14,19 @@ const Login = (props) => {
     setPassword(event.target.value);
   };
 
-  const handleLogin = async () => {
-    // const response = await axios.post(url, {
-    //   username: username,
-    //   password: password,
-    // });
-    // if (response.data.logged) {
-    //   props.setLoggedIn(true);
-    //   window.location.url();
-    // }
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    const response = await axios.post("https://opticabackend.onrender.com/user/login", {
+      username: username,
+      password: password,
+    });
+    console.log(response)
   };
 
   return (
-    <div class="loginlogin-page">
-      <div class="loginform">
-        <form class="loginlogin-form">
+    <div className="loginlogin-page">
+      <div className="loginform">
+        <form className="loginlogin-form">
           <input
             onChange={handleChangeUsername}
             type="text"
