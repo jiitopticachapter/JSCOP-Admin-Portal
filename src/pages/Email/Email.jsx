@@ -3,44 +3,380 @@ import './Email.css'
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
+import { useEffect, useState } from "react";
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import { alignPropType } from "react-bootstrap/esm/types";
 
-const EmailForm = (
-  <div>
-     <Form>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-        <Form.Label>Subject</Form.Label>
-        <Form.Control type="email" />
-      </Form.Group>
-      <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-        <Form.Label>Message</Form.Label>
-        <Form.Control as="textarea" rows={3} />
-      </Form.Group>
-    </Form>
-  </div>
-)
+
+
 
 const Email = () => {
-  return(
+  const [formData, setFormData] = useState({
+    subject: "",
+    message: "",
+    emails: []
+  });
+
+
+
+
+
+
+  const [usersDetails, setUserDetails] = useState([
+    {
+      name: " sharma",
+      phone: "123811111",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    }, {
+      name: "Sanju",
+      phone: "12454353468",
+      email: "dfdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+  ]);
+
+  const handleCheckboxChange = (event, email) => {
+    const { checked } = event.target;
+    // console.log(email);
+    // console.log("check", checked)
+
+    if (checked) {
+      const newEmails = formData.emails;
+      newEmails.push(email);
+      setFormData((prev) => {
+        return {
+          ...prev,
+          emails: newEmails
+        }
+      });
+    }
+    else {
+      setFormData((prev) => {
+        return {
+          ...prev,
+          emails: prev.emails.filter(e => e !== email)
+        }
+      });
+
+    }
+    // console.log("formdata", formData);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    // setFormData({
+    //   ...formData,
+    //   [name]: value
+    // })
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [name]: value
+      }
+    })
+    console.log(formData);
+  }
+
+
+  // useEffect(async () => {
+  //   console.log("hello")
+  //   const res = await axios.get("https://leetcode-rest-api.onrender.com/profile/kshitij0707");
+  //   const data = res.json().data;
+  //   console.log(res.json().data);
+  //   setUserDetails(data);
+
+  // }, [])
+
+
+  const gridContainerStyle = {
+
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 200px)', // Adjust column width as needed
+    gap: '10px', // Adjust gap between grid items as needed
+    // marginBottom: "100px",
+  };
+  const gridItemStyle = {
+    backgroundColor: 'lightblue',
+    border: '1px solid gray',
+    padding: '10px',
+    textAlign: 'center'
+  };
+
+
+  return (
     <>
-    <div className="email_page">
-      <h1>Email</h1>
-      <Tabs
-      defaultActiveKey="compose"
-      id="justify-tab-example"
-      className="mb-3 w-100"
-      justify
-    >
-      <Tab eventKey="compose" title="Compose Mail">
-        {EmailForm}
-      </Tab>
-      <Tab eventKey="selectId" title="Select Id">
-        Tab content for Profile
-      </Tab>
-      <Tab eventKey="preview" title="Preview">
-        Tab content for Loooonger Tab
-      </Tab>
-    </Tabs>
-    </div>
+      <div className="email_page">
+        <h1>Email</h1>
+        <Tabs
+          defaultActiveKey="compose"
+          id="justify-tab-example"
+          className="mb-3 w-100"
+          justify
+        >
+          <Tab eventKey="compose" title="Compose Mail">
+            <div>
+              <Form>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Label>Subject</Form.Label>
+                  <Form.Control type="email" name="subject" onChange={handleChange} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                  <Form.Label>Message</Form.Label>
+                  <Form.Control as="textarea" name="message" onChange={handleChange} rows={3} />
+                </Form.Group>
+              </Form>
+            </div>
+          </Tab>
+          <Tab eventKey="selectId" title="Select Id">
+            <div>
+              <Table style={{ width: '100%' }} striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Batch</th>
+                    <th >Department</th>
+                    <th>Select Id</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {usersDetails.map((user, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{index + 1}</td>
+                        <td>{user.name}</td>
+                        <td>{user.email}</td>
+                        <td>{user.phone}</td>
+                        <td>{user.batch}</td>
+                        <td>{user.department}</td>
+                        <td style={{ textAlign: "center" }} >
+                          <input className="selectelements" type="checkbox"
+                            onChange={(event) => handleCheckboxChange(event, user.email)} />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+
+              <Button style={{ margin: "10px" }} variant="dark" onClick={() => {
+                const checkboxes = document.querySelectorAll('.selectelements');
+                checkboxes.forEach((checkbox) => {
+                  checkbox.checked = true;
+
+                });
+
+                const emails = [];
+                for (let i = 0; i < usersDetails.length; i++) {
+                  emails.push(usersDetails[i].email);
+                }
+                setFormData(prevFormData => ({
+                  ...prevFormData,
+                  emails: emails
+                }));
+
+              }
+              }  >Select All</Button>
+              <Button variant="dark" onClick={() => {
+                const checkboxes = document.querySelectorAll('.selectelements');
+                checkboxes.forEach((checkbox) => {
+                  checkbox.checked = false;
+
+                });
+
+                const emails = [];
+                setFormData(prevFormData => ({
+                  ...prevFormData,
+                  emails: emails
+                }));
+
+
+
+
+
+              }}  >DeSelect All</Button>
+
+
+            </div>
+          </Tab>
+          <Tab eventKey="preview" title="Preview">
+
+
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+              <Card style={{ width: '900px', marginBottom: "10px" }}>
+
+                <Card.Body>
+                  <Card.Title>Subject</Card.Title>
+                  <Card.Text>
+                    {formData.subject}
+                  </Card.Text>
+
+                </Card.Body>
+              </Card>
+
+              <Card style={{
+                width: '900px', marginBottom: "10px"
+              }}>
+
+                <Card.Body>
+                  <Card.Title>Message</Card.Title>
+                  <Card.Text>
+                    {formData.message}
+                  </Card.Text>
+
+                </Card.Body>
+              </Card>
+              <div>
+                Emails
+                <div style={gridContainerStyle}>
+                  {formData.emails.map((email, index) => (
+                    <div key={index} style={gridItemStyle}>
+                      {email}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <Button style={{ textAlign: "center" }} variant="dark">Send</Button>
+            </div>
+          </Tab >
+        </Tabs >
+      </div >
     </>
   );
 };
