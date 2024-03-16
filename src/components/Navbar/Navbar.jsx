@@ -8,7 +8,6 @@ function NavbarComponent() {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
           <Nav className="ms-auto">
             <Nav.Link as={Link} to="/">
               Dashboard

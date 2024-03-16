@@ -239,12 +239,12 @@ const Whatsapp = () => {
           className="mb-3 w-100"
           justify
         >
-          <Tab eventKey="compose" title="Compose Mail">
+          <Tab eventKey="compose" title="Compose Message">
             <div>
               <Form>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                   <Form.Label>Message</Form.Label>
-                  <Form.Control as="textarea" name="message" onChange={handleChange} rows={3} />
+                  <Form.Control as="textarea" name="message" onChange={handleChange} cols={70} rows={7} />
                 </Form.Group>
               </Form>
             </div>
@@ -301,7 +301,8 @@ const Whatsapp = () => {
                 }
                 setFormData(prevFormData => ({
                   ...prevFormData,
-                  phones: array
+                  phones: array,
+                  names: n
                 }));
 
               }
@@ -342,18 +343,24 @@ const Whatsapp = () => {
 
                 </Card.Body>
               </Card>
-              <div>
-                Phones
+              <div style={{ backgroundColor: "white", padding: "25px", borderRadius: "10px" }}>
+                <Card.Title>Phone</Card.Title>
                 <div style={gridContainerStyle}>
                   {formData.names.map((name, index) => (
                     <div key={index} style={gridItemStyle}>
                       <table>
-                        <tr>
-                          <td>  {name} </td>
-                        </tr>
-                        <tr>
-                          <td> {formData.phones[index]}  </td>
-                        </tr>
+                        <tbody>
+                          <tr>
+                            <td>  {name} </td>
+                          </tr>
+                          <tr>
+                            <td> {formData.phones[index]}  </td>
+                          </tr>
+
+                        </tbody>
+
+
+
                       </table>
                     </div>
                   ))}

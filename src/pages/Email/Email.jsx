@@ -255,7 +255,7 @@ const Email = () => {
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                   <Form.Label>Message</Form.Label>
-                  <Form.Control as="textarea" name="message" onChange={handleChange} rows={3} />
+                  <Form.Control as="textarea" name="message" onChange={handleChange} cols={70} rows={7} />
                 </Form.Group>
               </Form>
             </div>
@@ -362,8 +362,8 @@ const Email = () => {
 
                 </Card.Body>
               </Card>
-              <div>
-                Emails
+              <div style={{ backgroundColor: "white", padding: "25px", borderRadius: "10px" }} >
+                <Card.Title>Emails</Card.Title>
                 <div style={gridContainerStyle}>
                   {formData.emails.map((email, index) => (
                     <div key={index} style={gridItemStyle}>
@@ -372,7 +372,7 @@ const Email = () => {
                   ))}
                 </div>
               </div>
-              <Button style={{ textAlign: "center" }} variant="dark">Send</Button>
+              <Button style={{ textAlign: "center", margin: "20px" }}  variant="dark">Send</Button>
             </div>
           </Tab >
         </Tabs >
