@@ -15,6 +15,7 @@ const Whatsapp = () => {
   const [formData, setFormData] = useState({
     subject: "",
     message: "",
+    names: [],
     phones: []
   });
 
@@ -167,17 +168,20 @@ const Whatsapp = () => {
     },
   ]);
 
-  const handleCheckboxChange = (event, phone) => {
+  const handleCheckboxChange = (event, phone, name) => {
     const { checked } = event.target;
 
 
     if (checked) {
       const newPhones = formData.phones;
+      const newNames = formData.names;
       newPhones.push(phone);
+      newNames.push(name);
       setFormData((prev) => {
         return {
           ...prev,
-          phones: newPhones
+          phones: newPhones,
+          names: newNames
         }
       });
     }
@@ -185,7 +189,9 @@ const Whatsapp = () => {
       setFormData((prev) => {
         return {
           ...prev,
-          phones: prev.phones.filter(e => e !== phone)
+          phones: prev.phones.filter(e => e !== phone),
+          names: prev.names.filter(e => e !== name),
+
         }
       });
 
@@ -272,7 +278,7 @@ const Whatsapp = () => {
                         <td>{user.department}</td>
                         <td style={{ textAlign: "center" }} >
                           <input className="selectelements" type="checkbox"
-                            onChange={(event) => handleCheckboxChange(event, user.phone)} />
+                            onChange={(event) => handleCheckboxChange(event, user.phone, user.name)} />
                         </td>
                       </tr>
                     );
@@ -288,8 +294,10 @@ const Whatsapp = () => {
                 });
 
                 const array = [];
+                const n = [];
                 for (let i = 0; i < usersDetails.length; i++) {
                   array.push(usersDetails[i].phone);
+                  n.push(usersDetails[i].name);
                 }
                 setFormData(prevFormData => ({
                   ...prevFormData,
@@ -308,11 +316,9 @@ const Whatsapp = () => {
                 const array = [];
                 setFormData(prevFormData => ({
                   ...prevFormData,
-                  phones: array
+                  phones: array,
+                  names: array
                 }));
-
-
-
 
 
               }}  >DeSelect All</Button>
@@ -339,9 +345,16 @@ const Whatsapp = () => {
               <div>
                 Phones
                 <div style={gridContainerStyle}>
-                  {formData.phones.map((phone, index) => (
+                  {formData.names.map((name, index) => (
                     <div key={index} style={gridItemStyle}>
-                      {phone}
+                      <table>
+                        <tr>
+                          <td>  {name} </td>
+                        </tr>
+                        <tr>
+                          <td> {formData.phones[index]}  </td>
+                        </tr>
+                      </table>
                     </div>
                   ))}
                 </div>
