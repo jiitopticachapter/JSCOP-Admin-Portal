@@ -1,28 +1,40 @@
 import React from "react";
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
-import Form from 'react-bootstrap/Form';
-import Table from 'react-bootstrap/Table';
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import Form from "react-bootstrap/Form";
+import Table from "react-bootstrap/Table";
 import { useEffect, useState } from "react";
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import { alignPropType } from "react-bootstrap/esm/types";
-
-
-
+import { whatsappMessage } from "../Services/user";
 
 const Whatsapp = () => {
   const [formData, setFormData] = useState({
     subject: "",
     message: "",
     names: [],
-    phones: []
+    phones: [],
   });
 
+  const doSend = async (e) => {
+    // e.preventDefault();
+    const timestamp = Date.now().toString();  
+    const jsonData = {
+      taskName: formData.subject,
+      message: formData.message,
+      phoneNumbers: formData.phones,
+      timeStamp: timestamp,
+    };
 
-
-
-
+    try {
+      const res = await whatsappMessage(jsonData);
+      alert(JSON.stringify(res.data));
+    } catch (error) {
+      console.error("Can't send :", error);
+      alert("An error occurred during sending WhatsApp message. Please try again later.");
+    }
+  };
 
   const [usersDetails, setUserDetails] = useState([
     {
@@ -52,46 +64,8 @@ const Whatsapp = () => {
       email: "f@238",
       batch: "1238",
       department: "1238",
-    }, {
-      name: "harsh sharma",
-      phone: "1238",
-      email: "fdf@238",
-      batch: "1238",
-      department: "1238",
     },
     {
-      name: "kshitij Gupta",
-      phone: "12334328",
-      email: "f@238",
-      batch: "1238",
-      department: "1238",
-    }, {
-      name: "harsh sharma",
-      phone: "1238",
-      email: "fdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "kshitij Gupta",
-      phone: "12334328",
-      email: "f@238",
-      batch: "1238",
-      department: "1238",
-    }, {
-      name: "harsh sharma",
-      phone: "1238",
-      email: "fdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "kshitij Gupta",
-      phone: "12334328",
-      email: "f@238",
-      batch: "1238",
-      department: "1238",
-    }, {
       name: "harsh sharma",
       phone: "1238",
       email: "fdf@238",
@@ -106,60 +80,111 @@ const Whatsapp = () => {
       department: "1238",
     },
     {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "harsh sharma",
+      phone: "1238",
+      email: "fdf@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
+      name: "kshitij Gupta",
+      phone: "12334328",
+      email: "f@238",
+      batch: "1238",
+      department: "1238",
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
       batch: "1238",
       department: "1238",
-    }, {
+    },
+    {
       name: "Sanju",
       phone: "12454353468",
       email: "dfdf@238",
@@ -171,7 +196,6 @@ const Whatsapp = () => {
   const handleCheckboxChange = (event, phone, name) => {
     const { checked } = event.target;
 
-
     if (checked) {
       const newPhones = formData.phones;
       const newNames = formData.names;
@@ -181,20 +205,17 @@ const Whatsapp = () => {
         return {
           ...prev,
           phones: newPhones,
-          names: newNames
-        }
+          names: newNames,
+        };
       });
-    }
-    else {
+    } else {
       setFormData((prev) => {
         return {
           ...prev,
-          phones: prev.phones.filter(e => e !== phone),
-          names: prev.names.filter(e => e !== name),
-
-        }
+          phones: prev.phones.filter((e) => e !== phone),
+          names: prev.names.filter((e) => e !== name),
+        };
       });
-
     }
     // console.log("formdata", formData);
   };
@@ -208,26 +229,24 @@ const Whatsapp = () => {
     setFormData((prev) => {
       return {
         ...prev,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
     console.log(formData);
-  }
+  };
 
   const gridContainerStyle = {
-
-    display: 'grid',
-    gridTemplateColumns: 'repeat(4, 200px)', // Adjust column width as needed
-    gap: '10px', // Adjust gap between grid items as needed
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 200px)", // Adjust column width as needed
+    gap: "10px", // Adjust gap between grid items as needed
     // marginBottom: "100px",
   };
   const gridItemStyle = {
-    backgroundColor: 'lightblue',
-    border: '1px solid gray',
-    padding: '10px',
-    textAlign: 'center'
+    backgroundColor: "lightblue",
+    border: "1px solid gray",
+    padding: "10px",
+    textAlign: "center",
   };
-
 
   return (
     <>
@@ -242,26 +261,33 @@ const Whatsapp = () => {
           <Tab eventKey="compose" title="Compose Message">
             <div>
               <Form>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlTextarea1"
+                >
                   <Form.Label>Message</Form.Label>
-                  <Form.Control as="textarea" name="message" onChange={handleChange} cols={70} rows={7} />
+                  <Form.Control
+                    as="textarea"
+                    name="message"
+                    onChange={handleChange}
+                    cols={70}
+                    rows={7}
+                  />
                 </Form.Group>
               </Form>
             </div>
           </Tab>
           <Tab eventKey="selectId" title="Select Id">
             <div>
-              <Table style={{ width: '100%' }} striped bordered hover>
+              <Table style={{ width: "100%" }} striped bordered hover>
                 <thead>
                   <tr>
                     <th>S.No</th>
                     <th>Name</th>
-                    <th>
-                      Email
-                    </th>
+                    <th>Email</th>
                     <th>Phone No.</th>
                     <th>Batch</th>
-                    <th >Department</th>
+                    <th>Department</th>
                     <th>Select Id</th>
                   </tr>
                 </thead>
@@ -276,9 +302,14 @@ const Whatsapp = () => {
                         <td>{user.phone}</td>
                         <td>{user.batch}</td>
                         <td>{user.department}</td>
-                        <td style={{ textAlign: "center" }} >
-                          <input className="selectelements" type="checkbox"
-                            onChange={(event) => handleCheckboxChange(event, user.phone, user.name)} />
+                        <td style={{ textAlign: "center" }}>
+                          <input
+                            className="selectelements"
+                            type="checkbox"
+                            onChange={(event) =>
+                              handleCheckboxChange(event, user.phone, user.name)
+                            }
+                          />
                         </td>
                       </tr>
                     );
@@ -286,64 +317,78 @@ const Whatsapp = () => {
                 </tbody>
               </Table>
 
-              <Button style={{ margin: "10px" }} variant="dark" onClick={() => {
-                const checkboxes = document.querySelectorAll('.selectelements');
-                checkboxes.forEach((checkbox) => {
-                  checkbox.checked = true;
+              <Button
+                style={{ margin: "10px" }}
+                variant="dark"
+                onClick={() => {
+                  const checkboxes =
+                    document.querySelectorAll(".selectelements");
+                  checkboxes.forEach((checkbox) => {
+                    checkbox.checked = true;
+                  });
 
-                });
+                  const array = [];
+                  const n = [];
+                  for (let i = 0; i < usersDetails.length; i++) {
+                    array.push(usersDetails[i].phone);
+                    n.push(usersDetails[i].name);
+                  }
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    phones: array,
+                    names: n,
+                  }));
+                }}
+              >
+                Select All
+              </Button>
+              <Button
+                variant="dark"
+                onClick={() => {
+                  const checkboxes =
+                    document.querySelectorAll(".selectelements");
+                  checkboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+                  });
 
-                const array = [];
-                const n = [];
-                for (let i = 0; i < usersDetails.length; i++) {
-                  array.push(usersDetails[i].phone);
-                  n.push(usersDetails[i].name);
-                }
-                setFormData(prevFormData => ({
-                  ...prevFormData,
-                  phones: array,
-                  names: n
-                }));
-
-              }
-              }  >Select All</Button>
-              <Button variant="dark" onClick={() => {
-                const checkboxes = document.querySelectorAll('.selectelements');
-                checkboxes.forEach((checkbox) => {
-                  checkbox.checked = false;
-
-                });
-
-                const array = [];
-                setFormData(prevFormData => ({
-                  ...prevFormData,
-                  phones: array,
-                  names: array
-                }));
-
-
-              }}  >DeSelect All</Button>
-
-
+                  const array = [];
+                  setFormData((prevFormData) => ({
+                    ...prevFormData,
+                    phones: array,
+                    names: array,
+                  }));
+                }}
+              >
+                DeSelect All
+              </Button>
             </div>
           </Tab>
           <Tab eventKey="preview" title="Preview">
-
-
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <Card style={{
-                width: '900px', marginBottom: "10px"
-              }}>
-
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Card
+                style={{
+                  width: "900px",
+                  marginBottom: "10px",
+                }}
+              >
                 <Card.Body>
                   <Card.Title>Message</Card.Title>
-                  <Card.Text>
-                    {formData.message}
-                  </Card.Text>
-
+                  <Card.Text>{formData.message}</Card.Text>
                 </Card.Body>
               </Card>
-              <div style={{ backgroundColor: "white", padding: "25px", borderRadius: "10px" }}>
+              <div
+                style={{
+                  backgroundColor: "white",
+                  padding: "25px",
+                  borderRadius: "10px",
+                }}
+              >
                 <Card.Title>Phone</Card.Title>
                 <div style={gridContainerStyle}>
                   {formData.names.map((name, index) => (
@@ -351,26 +396,28 @@ const Whatsapp = () => {
                       <table>
                         <tbody>
                           <tr>
-                            <td>  {name} </td>
+                            <td> {name} </td>
                           </tr>
                           <tr>
-                            <td> {formData.phones[index]}  </td>
+                            <td> {formData.phones[index]} </td>
                           </tr>
-
                         </tbody>
-
-
-
                       </table>
                     </div>
                   ))}
                 </div>
               </div>
-              <Button style={{ textAlign: "center", margin: "20px" }} variant="dark">Send</Button>
+              <Button
+                style={{ textAlign: "center", margin: "20px" }}
+                variant="dark"
+                onClick={doSend}
+              >
+                Send
+              </Button>
             </div>
-          </Tab >
-        </Tabs >
-      </div >
+          </Tab>
+        </Tabs>
+      </div>
     </>
   );
 };
