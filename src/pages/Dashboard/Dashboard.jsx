@@ -101,6 +101,7 @@ const Dashboard = () => {
                 {},
                 config
             );
+            toast.success("Ticket Sent Successfully");
             console.log("After Sending Ticket", res);
         } catch (err) {
             console.log(err);
