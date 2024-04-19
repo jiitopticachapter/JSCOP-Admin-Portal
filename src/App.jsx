@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { UserState } from "./Context/UserContextProvider";
+import ScanQR from "./pages/ScanQR/ScanQR";
 
 const App = () => {
     const { user } = UserState();
@@ -24,6 +25,7 @@ const App = () => {
                 <Route path="/whatsapp" element={<Whatsapp />} />
                 <Route path="/email" element={<Email />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/scanqr" element={<ScanQR />} />
             </Routes>
         </>
     );

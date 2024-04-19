@@ -42,8 +42,23 @@ const Login = () => {
             }
             setLoader(false);
         } catch (err) {
-            toast.error("Login Failed");
-            console.log(err);
+            if (err.response.status == 400) {
+                try {
+                    const res = await axios.post("/volunteer/login", {
+                        email: email,
+                        password: password,
+                    });
+                    console.log(res);
+                    localStorage.setItem("userInfo", JSON.stringify(res.data));
+                    setUser(res.data);
+                    navigate("/scanqr");
+                } catch (err) {
+                    toast.error("Login Failed");
+                    console.log(err);
+                    setLoader(false);
+                    return;
+                }
+            }
             setLoader(false);
         }
     };

@@ -126,7 +126,6 @@ const Dashboard = () => {
                 onHide={() => setModalShowVerify(false)}
                 allusers={allUsers}
                 details={details}
-                setUserDetails={setUserDetails}
             />
             <Stack
                 direction="horizontal"
