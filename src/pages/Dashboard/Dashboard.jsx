@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import Stack from "react-bootstrap/Stack";
 import Spinner from "react-bootstrap/Spinner";
 import UserVerifyModal from "../../components/Modals/UserVerifyModal";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
     const [modalShowEdit, setModalShowEdit] = useState(false);
@@ -38,10 +39,7 @@ const Dashboard = () => {
                         }`,
                     },
                 };
-                const response = await axios.get(
-                    "http://localhost:4000/admin/allUsers",
-                    config
-                );
+                const response = await axios.get("/admin/allUsers", config);
                 // console.log("response", response);
                 setAllUsers(response.data);
                 setUserDetails(response.data);
@@ -54,7 +52,7 @@ const Dashboard = () => {
         setLoading(true);
         // console.log(response);
         getFunction();
-    }, [allUsers]);
+    }, []);
 
     // Function to update user details
     const updateUserDetails = (updatedDetails) => {
@@ -89,6 +87,26 @@ const Dashboard = () => {
         setUserDetails(newUser);
     };
 
+    const handleSendTicket = async (id) => {
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${
+                        JSON.parse(localStorage.getItem("userInfo")).jwt
+                    }`,
+                },
+            };
+            const res = await axios.post(
+                `/admin/sendTicketafterVerification/${id}`,
+                {},
+                config
+            );
+            console.log("After Sending Ticket", res);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     return (
         <>
             <UserUpdateModal
@@ -105,7 +123,9 @@ const Dashboard = () => {
             <UserVerifyModal
                 show={modalShowVerify}
                 onHide={() => setModalShowVerify(false)}
+                allusers={allUsers}
                 details={details}
+                setUserDetails={setUserDetails}
             />
             <Stack
                 direction="horizontal"
@@ -213,6 +233,14 @@ const Dashboard = () => {
                                             }}
                                         >
                                             <MdDelete />
+                                        </button>
+                                        <button
+                                            className="btn btn-secondary me2"
+                                            onClick={() =>
+                                                handleSendTicket(user._id)
+                                            }
+                                        >
+                                            Send Ticket
                                         </button>
                                     </td>
                                 </tr>

@@ -19,14 +19,23 @@ function UserVerifyModal(props) {
         };
         try {
             const response = await axios.get(
-                `http://localhost:4000/admin//verify/${props.details._id}`,
+                `/admin/verify/${props.details._id}`,
                 config
             );
             console.log(response);
             if (response.data == "User Verified") {
-                toast.success("User Verified Successfully");
-                props.onHide();
-                props.updateUserDetails(props.details);
+                toast.success("User Verified Successfully, sending ticket");
+                try {
+                    const res = await axios.post(
+                        `/admin/sendTicket/${props.details._id}`,
+                        {},
+                        config
+                    );
+                    console.log(res);
+                } catch (err) {
+                    toast.error("Error in Sending the Ticket");
+                }
+                window.location.reload();
             } else {
                 toast.error("User Verification Failed");
                 props.onHide();

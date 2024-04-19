@@ -27,13 +27,10 @@ const Login = () => {
         event.preventDefault();
         console.log(email, password);
         try {
-            const response = await axios.post(
-                "http://localhost:4000/admin/login",
-                {
-                    email: email,
-                    password: password,
-                }
-            );
+            const response = await axios.post("/admin/login", {
+                email: email,
+                password: password,
+            });
             if (response.request.status === 200) {
                 console.log(response.data);
                 localStorage.setItem("userInfo", JSON.stringify(response.data));
