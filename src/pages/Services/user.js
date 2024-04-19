@@ -6,8 +6,17 @@ const whatsappMessage = (data) => {
       headers: {
         'Content-Type': 'application/json'
       }
+    }); 
+  };
+
+  const EmailSend = (data) => {
+    console.log("inside process : data -> "+JSON.stringify(data));
+    return publicReq.post("/sendMail/", JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
   };
   
 
-export {whatsappMessage};
+export {whatsappMessage,EmailSend};
