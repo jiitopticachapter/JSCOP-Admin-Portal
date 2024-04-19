@@ -7,32 +7,26 @@ import Email from "./pages/Email/Email";
 import Whatsapp from "./pages/Whatsapp/Whatsapp";
 import Navbar from "./components/Navbar/Navbar";
 import { useState } from "react";
-const App = () => {
-  const [loggedIn, setLoggedIn] = useState(true);
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-  return (
-    <>
-      <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            loggedIn ? <Dashboard /> : <Login setLoggedIn={setLoggedIn} />
-          }
-        />
-        <Route
-          path="/whatsapp"
-          element={
-            loggedIn ? <Whatsapp /> : <Login setLoggedIn={setLoggedIn} />
-          }
-        />
-        <Route
-          path="/email"
-          element={loggedIn ? <Email /> : <Login setLoggedIn={setLoggedIn} />}
-        />
-      </Routes>
-    </>
-  );
+import { UserState } from "./Context/UserContextProvider";
+
+const App = () => {
+    const { user } = UserState();
+
+    return (
+        <>
+            <ToastContainer />
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/whatsapp" element={<Whatsapp />} />
+                <Route path="/email" element={<Email />} />
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </>
+    );
 };
 
 export default App;

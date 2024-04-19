@@ -2,289 +2,227 @@ import React, { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { MdOutlineEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-
-function MyVerticallyCenteredModalEdit(props) {
-  console.log("propssss", props);
-  const [validated, setValidated] = useState(false);
-  const [formData, setFormData] = useState({
-    name: props.details ? props.details.name : "",
-    email: props.details ? props.details.email : "",
-    phone: props.details ? props.details.phone : "",
-    batch: props.details ? props.details.batch : "",
-    department: props.details ? props.details.department : "",
-    // name: "",
-    // email: "",
-    // phone: "",
-    // batch: "",
-    // department: "",
-  });
-
-  useEffect(() => {
-    console.log("njfhdhfjdhfdhfd", props);
-    setFormData({
-      name: props.details ? props.details.name : "",
-      email: props.details ? props.details.email : "",
-      phone: props.details ? props.details.phone : "",
-      batch: props.details ? props.details.batch : "",
-      department: props.details ? props.details.department : "",
-    });
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  const handleSubmit = (event) => {
-    // event.preventDefault(); // Prevent default form submission
-    // // Create updated details object
-    // const updatedDetails = {
-    //   ...props.details,
-    //   ...formData,
-    // };
-    // // Call onUpdate prop to update user details
-    // props.onUpdate(updatedDetails);
-    // props.onHide(); // Hide modal after update
-
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
-  };
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter-edit"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter-edit">
-          Edit Details
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <h4>You can edit the below info </h4>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <Form.Group controlId="formName">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a name.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group controlId="formEmail">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid email.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group controlId="formPhone">
-            <Form.Label>Phone</Form.Label>
-            <Form.Control
-              type="tel"
-              placeholder="Enter phone number"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a valid phone number.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group controlId="formBatch">
-            <Form.Label>Batch</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter batch"
-              name="batch"
-              value={formData.batch}
-              onChange={handleChange}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a batch number.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group controlId="formDepartment">
-            <Form.Label>Department</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter department"
-              name="department"
-              value={formData.department}
-              onChange={handleChange}
-              required
-            />
-            <Form.Control.Feedback type="invalid">
-              Please provide a department.
-            </Form.Control.Feedback>
-          </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Save Changes
-          </Button>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
-
-function MyVerticallyCenteredModalDelete(props) {
-  console.log(props);
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter-edit"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter-delete">
-          {props.name}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <h4>Confirm Delete</h4>
-        <p>
-          Are you sure, you want to delete the user? This action cannot be
-          undone. Click on "Yes" to proceed.
-        </p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button>Yes</Button>
-        <Button onClick={props.onHide}>No</Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
+import UserDeleteModal from "../../components/Modals/UserDeleteModal";
+import UserUpdateModal from "../../components/Modals/UserUpdateModal";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Stack from "react-bootstrap/Stack";
+import Spinner from "react-bootstrap/Spinner";
+import UserVerifyModal from "../../components/Modals/UserVerifyModal";
 
 const Dashboard = () => {
-  const [modalShowEdit, setModalShowEdit] = useState(false);
-  const [modalShowDelete, setModalShowDelete] = useState(false);
-  const [details, setDetails] = useState(null);
+    const [modalShowEdit, setModalShowEdit] = useState(false);
+    const [modalShowDelete, setModalShowDelete] = useState(false);
+    const [modalShowVerify, setModalShowVerify] = useState(false);
 
-  const [usersDetails, setUserDetails] = useState([
-    {
-      name: "harsh sharma",
-      email: "1238",
-      phone: "1238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "ABC Hero",
-      email: "1238",
-      phone: "1238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "XYZ Man",
-      email: "1238",
-      phone: "1238",
-      batch: "1238",
-      department: "1238",
-    },
-  ]);
+    const [details, setDetails] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-  // Function to update user details
-  const updateUserDetails = (updatedDetails) => {
-    setUserDetails(
-      usersDetails.map((user) => (user === details ? updatedDetails : user))
+    const [usersDetails, setUserDetails] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const getFunction = async () => {
+            try {
+                // console.log(
+                //     "Token",
+                //     JSON.parse(localStorage.getItem("userInfo"))
+                // );
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${
+                            JSON.parse(localStorage.getItem("userInfo")).jwt
+                        }`,
+                    },
+                };
+                const response = await axios.get(
+                    "http://localhost:4000/admin/allUsers",
+                    config
+                );
+                // console.log("response", response);
+                setAllUsers(response.data);
+                setUserDetails(response.data);
+                setLoading(false);
+            } catch (err) {
+                localStorage.removeItem("userInfo");
+                navigate("/login");
+            }
+        };
+        setLoading(true);
+        // console.log(response);
+        getFunction();
+    }, [allUsers]);
+
+    // Function to update user details
+    const updateUserDetails = (updatedDetails) => {
+        setUserDetails(
+            usersDetails.map((user) =>
+                user === details ? updatedDetails : user
+            )
+        );
+    };
+
+    const handleUnverifiedUser = (event) => {
+        const newUser = allUsers.filter((user) => {
+            return user.verified == false;
+        });
+        // console.log("newUser", newUser);
+        setUserDetails(newUser);
+    };
+
+    const handleVerifiedUser = async (event) => {
+        const newUser = allUsers.filter((user) => {
+            return user.verified == true;
+        });
+        setUserDetails(newUser);
+    };
+
+    const searchUser = (event) => {
+        const newUser = allUsers.filter((user) => {
+            return user.name
+                .toLowerCase()
+                .includes(event.target.value.toLowerCase());
+        });
+        setUserDetails(newUser);
+    };
+
+    return (
+        <>
+            <UserUpdateModal
+                show={modalShowEdit}
+                onHide={() => setModalShowEdit(false)}
+                details={details} //Pass details to the modal
+                // onUpdate={updateUserDetails} // Pass the update function to the modal
+            />
+            <UserDeleteModal
+                show={modalShowDelete}
+                onHide={() => setModalShowDelete(false)}
+                details={details}
+            />
+            <UserVerifyModal
+                show={modalShowVerify}
+                onHide={() => setModalShowVerify(false)}
+                details={details}
+            />
+            <Stack
+                direction="horizontal"
+                gap={3}
+                className="my-2 d-flex justify-content-center"
+            >
+                <Button
+                    variant="primary"
+                    onClick={() => setUserDetails(allUsers)}
+                >
+                    All Users
+                </Button>
+                <Button variant="primary" onClick={handleVerifiedUser}>
+                    Verified User
+                </Button>
+                <Button variant="primary" onClick={handleUnverifiedUser}>
+                    Unverified User
+                </Button>
+            </Stack>
+            <Stack
+                direction="horizontal"
+                gap={3}
+                className="my-2 d-flex justify-content-center"
+            >
+                <input
+                    type="text"
+                    placeholder="Search User"
+                    onChange={searchUser}
+                    className="form-control w-50"
+                />
+            </Stack>
+            {loading ? (
+                <div className="d-flex justify-content-center align-items-center  w-100 my-8">
+                    <Spinner animation="border" variant="primary" />
+                </div>
+            ) : (
+                <Table responsive="sm" striped bordered hover size="sm">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>College Name</th>
+                            <th>Batch</th>
+                            <th>Department</th>
+                            <th>Hosteller/DayScholar</th>
+                            <th>Enrollment</th>
+                            <th>Payment</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {usersDetails.map((user, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>{index + 1}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>{user.phoneNo}</td>
+                                    <td>JIIT</td>
+                                    <td>{user.batch}</td>
+                                    <td>{user.branch}</td>
+                                    <td>{user.enrollmentType}</td>
+                                    <td>{user.enrollmentNo}</td>
+                                    <td>
+                                        <a
+                                            href={user.payment.url}
+                                            target="_blank"
+                                        >
+                                            Photo
+                                        </a>
+                                    </td>
+                                    <td className="d-flex">
+                                        <button
+                                            className={`btn ${
+                                                user.verified
+                                                    ? "btn-success"
+                                                    : "btn-warning"
+                                            } mx-2`}
+                                            onClick={() => {
+                                                setDetails(user);
+                                                setModalShowVerify(true);
+                                            }}
+                                        >
+                                            {user.verified
+                                                ? "Verified"
+                                                : "Verify"}
+                                        </button>
+                                        <button
+                                            className="btn btn-primary me-2"
+                                            onClick={() => {
+                                                setDetails(user);
+                                                setModalShowEdit(true);
+                                            }}
+                                        >
+                                            <MdOutlineEdit />
+                                        </button>
+                                        <br></br>
+                                        <button
+                                            className="btn btn-danger me-2"
+                                            onClick={() => {
+                                                setDetails(user);
+                                                setModalShowDelete(true);
+                                            }}
+                                        >
+                                            <MdDelete />
+                                        </button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </Table>
+            )}
+        </>
     );
-  };
-
-  return (
-    <>
-      <MyVerticallyCenteredModalEdit
-        show={modalShowEdit}
-        onHide={() => setModalShowEdit(false)}
-        details={details} //Pass details to the modal
-        // onUpdate={updateUserDetails} // Pass the update function to the modal
-      />
-
-      <MyVerticallyCenteredModalDelete
-        show={modalShowDelete}
-        onHide={() => setModalShowDelete(false)}
-        details={details}
-      />
-      <Table responsive="sm" striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone Number</th>
-            <th>Batch</th>
-            <th>Department</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usersDetails.map((user, index) => {
-            return (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.phone}</td>
-                <td>{user.batch}</td>
-                <td>{user.department}</td>
-                <td>
-                  <button
-                    onClick={() => {
-                      setDetails(user);
-                      setModalShowEdit(true);
-                    }}
-                  >
-                    <MdOutlineEdit />
-                  </button>
-                  <br></br>
-                  <button
-                    onClick={() => {
-                      setDetails(user);
-                      setModalShowDelete(true);
-                    }}
-                  >
-                    <MdDelete />
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </>
-  );
 };
 
 export default Dashboard;
