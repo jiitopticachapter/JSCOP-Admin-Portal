@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { alignPropType } from "react-bootstrap/esm/types";
+import { EmailSend } from "../Services/user";
 
 
 
@@ -235,6 +236,22 @@ const Email = () => {
     textAlign: 'center'
   };
 
+  const doSend = async (e) => {
+    const jsonData = {
+      subject: formData.subject,
+      customText: formData.message,
+      selectedEmails: formData.emails,
+    };
+
+    try {
+      const res = await EmailSend(jsonData);
+      alert(JSON.stringify(res.data));
+    } catch (error) {
+      console.error("Can't send :", error);
+      alert("An error occurred during sending Email. Please try again later.");
+    }
+  }
+
 
   return (
     <>
@@ -372,7 +389,7 @@ const Email = () => {
                   ))}
                 </div>
               </div>
-              <Button style={{ textAlign: "center", margin: "20px" }}  variant="dark">Send</Button>
+              <Button style={{ textAlign: "center", margin: "20px" }}  variant="dark" onClick={doSend}>Send</Button>
             </div>
           </Tab >
         </Tabs >
