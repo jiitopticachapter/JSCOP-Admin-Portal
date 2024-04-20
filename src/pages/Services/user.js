@@ -10,8 +10,8 @@ const whatsappMessage = (data) => {
   };
 
   const EmailSend = (data) => {
-    console.log("inside process : data -> "+JSON.stringify(data));
-    return publicReq.post("/sendMail/", JSON.stringify(data), {
+    console.log("inside process : data -> "+ JSON.stringify(data));
+    return publicReq.post(`${import.meta.env.VITE_LOCALHOST}/sendMail`, JSON.stringify(data), {
       headers: {
         'Content-Type': 'application/json'
       }

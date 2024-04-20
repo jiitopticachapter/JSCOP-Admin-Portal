@@ -8,8 +8,11 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { alignPropType } from "react-bootstrap/esm/types";
 import { whatsappMessage } from "../Services/user";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Whatsapp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     subject: "",
     message: "",
@@ -192,6 +195,36 @@ const Whatsapp = () => {
       department: "1238",
     },
   ]);
+  
+  useEffect( () => {
+    const getFunction = async () => {
+        try {
+            // console.log(
+            //     "Token",
+            //     JSON.parse(localStorage.getItem("userInfo"))
+            // );
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${
+                        JSON.parse(localStorage.getItem("userInfo")).jwt
+                    }`,
+                },
+            };
+            const response = await axios.get("/admin/allUsers", config);
+            console.log("response", response);
+            // setAllUsers(response.data);
+            setUserDetails(response.data);
+            // setLoading(false);
+        } catch (err) {
+            localStorage.removeItem("userInfo");
+            navigate("/login");
+        }
+    };
+    // setLoading(true);
+    // console.log(response);
+    getFunction();
+
+  }, [])
 
   const handleCheckboxChange = (event, phone, name) => {
     const { checked } = event.target;

@@ -9,11 +9,13 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { alignPropType } from "react-bootstrap/esm/types";
 import { EmailSend } from "../Services/user";
-
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 
 const Email = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     subject: "",
     message: "",
@@ -212,14 +214,35 @@ const Email = () => {
   }
 
 
-  // useEffect(async () => {
-  //   console.log("hello")
-  //   const res = await axios.get("https://leetcode-rest-api.onrender.com/profile/kshitij0707");
-  //   const data = res.json().data;
-  //   console.log(res.json().data);
-  //   setUserDetails(data);
+  useEffect( () => {
+    const getFunction = async () => {
+        try {
+            // console.log(
+            //     "Token",
+            //     JSON.parse(localStorage.getItem("userInfo"))
+            // );
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${
+                        JSON.parse(localStorage.getItem("userInfo")).jwt
+                    }`,
+                },
+            };
+            const response = await axios.get("/admin/allUsers", config);
+            console.log("response", response);
+            // setAllUsers(response.data);
+            setUserDetails(response.data);
+            // setLoading(false);
+        } catch (err) {
+            localStorage.removeItem("userInfo");
+            navigate("/login");
+        }
+    };
+    // setLoading(true);
+    // console.log(response);
+    getFunction();
 
-  // }, [])
+  }, [])
 
 
   const gridContainerStyle = {
