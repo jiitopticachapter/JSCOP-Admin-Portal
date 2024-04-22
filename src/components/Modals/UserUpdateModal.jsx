@@ -11,7 +11,7 @@ function UserUpdateModal(props) {
         email: props.details ? props.details.email : "",
         phone: props.details ? props.details.phone : "",
         batch: props.details ? props.details.batch : "",
-        department: props.details ? props.details.department : "",
+        department: props.details ? props.details.branch : "",
         // name: "",
         // email: "",
         // phone: "",
@@ -20,21 +20,50 @@ function UserUpdateModal(props) {
     });
 
     useEffect(() => {
+        console.log("props.details", props.details);
         setFormData({
             name: props.details ? props.details.name : "",
             email: props.details ? props.details.email : "",
-            phone: props.details ? props.details.phone : "",
+            phone: props.details ? props.details.phoneNo : "",
             batch: props.details ? props.details.batch : "",
-            department: props.details ? props.details.department : "",
+            department: props.details ? props.details.branch : "",
         });
-    }, []);
+    }, [props.details]);
+
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        console.log("formdata", formData);
+        const res = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/user/${props.details._id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(formData),
+            });
+        if (res.status == 200) {
+            console.log("working!!")
+            const data = await res.json();
+            console.log(data);
+            // props.onUpdate(data);
+            // console.log(data);
+            props.onHide();
+            window.location.reload();
+
+
+        } else {
+            console.log("User not updated");
+        }
+
+
         // event.preventDefault(); // Prevent default form submission
         // // Create updated details object
         // const updatedDetails = {
@@ -45,12 +74,17 @@ function UserUpdateModal(props) {
         // props.onUpdate(updatedDetails);
         // props.onHide(); // Hide modal after update
 
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        setValidated(true);
+        // const form = event.currentTarget;
+        // if (form.checkValidity() === false) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        // }
+        // setValidated(true);
+        ///  const form = event.currentTarget;
+        // if (form.checkValidity() === false) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        // }
     };
     return (
         <Modal
@@ -142,7 +176,7 @@ function UserUpdateModal(props) {
                         </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" >
                         Save Changes
                     </Button>
                 </Form>
