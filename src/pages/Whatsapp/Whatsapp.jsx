@@ -22,7 +22,7 @@ const Whatsapp = () => {
 
   const doSend = async (e) => {
     // e.preventDefault();
-    const timestamp = Date.now().toString();  
+    const timestamp = Date.now().toString();
     const jsonData = {
       taskName: formData.subject,
       message: formData.message,
@@ -35,7 +35,9 @@ const Whatsapp = () => {
       alert(JSON.stringify(res.data));
     } catch (error) {
       console.error("Can't send :", error);
-      alert("An error occurred during sending WhatsApp message. Please try again later.");
+      alert(
+        "An error occurred during sending WhatsApp message. Please try again later."
+      );
     }
   };
 
@@ -75,156 +77,36 @@ const Whatsapp = () => {
       batch: "1238",
       department: "1238",
     },
-    {
-      name: "kshitij Gupta",
-      phone: "12334328",
-      email: "f@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "harsh sharma",
-      phone: "1238",
-      email: "fdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "kshitij Gupta",
-      phone: "12334328",
-      email: "f@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "harsh sharma",
-      phone: "1238",
-      email: "fdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "kshitij Gupta",
-      phone: "12334328",
-      email: "f@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "harsh sharma",
-      phone: "1238",
-      email: "fdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "kshitij Gupta",
-      phone: "12334328",
-      email: "f@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
-    {
-      name: "Sanju",
-      phone: "12454353468",
-      email: "dfdf@238",
-      batch: "1238",
-      department: "1238",
-    },
   ]);
-  
-  useEffect( () => {
+
+  useEffect(() => {
     const getFunction = async () => {
-        try {
-            // console.log(
-            //     "Token",
-            //     JSON.parse(localStorage.getItem("userInfo"))
-            // );
-            const config = {
-                headers: {
-                    Authorization: `Bearer ${
-                        JSON.parse(localStorage.getItem("userInfo")).jwt
-                    }`,
-                },
-            };
-            const response = await axios.get("/admin/allUsers", config);
-            console.log("response", response);
-            // setAllUsers(response.data);
-            setUserDetails(response.data);
-            // setLoading(false);
-        } catch (err) {
-            localStorage.removeItem("userInfo");
-            navigate("/login");
-        }
+      try {
+        // console.log(
+        //     "Token",
+        //     JSON.parse(localStorage.getItem("userInfo"))
+        // );
+        const config = {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("userInfo")).jwt
+            }`,
+          },
+        };
+        const response = await axios.get("/admin/allUsers", config);
+        console.log("response", response);
+        // setAllUsers(response.data);
+        setUserDetails(response.data);
+        // setLoading(false);
+      } catch (err) {
+        localStorage.removeItem("userInfo");
+        navigate("/login");
+      }
     };
     // setLoading(true);
     // console.log(response);
     getFunction();
-
-  }, [])
+  }, []);
 
   const handleCheckboxChange = (event, phone, name) => {
     const { checked } = event.target;
@@ -255,10 +137,6 @@ const Whatsapp = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    // setFormData({
-    //   ...formData,
-    //   [name]: value
-    // })
     setFormData((prev) => {
       return {
         ...prev,
@@ -332,15 +210,19 @@ const Whatsapp = () => {
                         <td>{index + 1}</td>
                         <td>{user.name}</td>
                         <td>{user.email}</td>
-                        <td>{user.phone}</td>
+                        <td>{user.phoneNo}</td>
                         <td>{user.batch}</td>
-                        <td>{user.department}</td>
+                        <td>{user.branch}</td>
                         <td style={{ textAlign: "center" }}>
                           <input
                             className="selectelements"
                             type="checkbox"
                             onChange={(event) =>
-                              handleCheckboxChange(event, user.phone, user.name)
+                              handleCheckboxChange(
+                                event,
+                                user.phoneNo,
+                                user.name
+                              )
                             }
                           />
                         </td>
@@ -392,7 +274,7 @@ const Whatsapp = () => {
                   }));
                 }}
               >
-                DeSelect All
+                Deselect All
               </Button>
             </div>
           </Tab>
@@ -412,7 +294,8 @@ const Whatsapp = () => {
               >
                 <Card.Body>
                   <Card.Title>Message</Card.Title>
-                  <Card.Text>{formData.message}</Card.Text>
+                  <pre>{formData.message}</pre>
+                  {/* <Card.Text>{formData.message}</Card.Text> */}
                 </Card.Body>
               </Card>
               <div
@@ -432,7 +315,7 @@ const Whatsapp = () => {
                             <td> {name} </td>
                           </tr>
                           <tr>
-                            <td> {formData.phones[index]} </td>
+                            <td> {formData.phones[index] || "NA"} </td>
                           </tr>
                         </tbody>
                       </table>
