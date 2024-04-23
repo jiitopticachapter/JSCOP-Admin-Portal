@@ -2,10 +2,27 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
 function UserDeleteModal(props) {
-    const handleDelete = () => {
+    const handleDelete = async () => {
         // write code to delete the user
+        const res = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/user/${props.details._id}`, {
 
-        console.log("Delete");
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+
+        }).then(() => {
+            console.log("deleting!!");
+            props.onHide();
+            window.location.reload();
+
+        })
+        // if (res.status == 200) {
+        //     console.log("deleted user");
+        //     props.onHide();
+        // }
+
     };
     return (
         <Modal
