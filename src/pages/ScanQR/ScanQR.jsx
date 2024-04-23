@@ -38,7 +38,7 @@ const ScanQR = () => {
             });
 
             if(response.ok){
-                const data = response.json();
+                const data = await response.json();
                 console.log(data);
             }
             else{

@@ -39,7 +39,7 @@ const Dashboard = () => {
                         }`,
                     },
                 };
-                const response = await axios.get("/admin/allUsers", config);
+                const response = await axios.get(`admin/allUsers`, config);
                 // console.log("response", response);
                 setAllUsers(response.data);
                 setUserDetails(response.data);

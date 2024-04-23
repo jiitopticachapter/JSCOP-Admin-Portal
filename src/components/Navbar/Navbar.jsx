@@ -8,6 +8,7 @@ function NavbarComponent() {
     const Navigate = useNavigate();
     const handleLogOut = () => {
         localStorage.removeItem("userInfo");
+        
         Navigate("/login");
     };
 
