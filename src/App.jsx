@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./pages/Login/Login";
 import Email from "./pages/Email/Email";
-
 import Whatsapp from "./pages/Whatsapp/Whatsapp";
 import Navbar from "./components/Navbar/Navbar";
 import { useState } from "react";
@@ -26,6 +25,7 @@ const App = () => {
                 <Route path="/email" element={<Email />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/scanqr" element={<ScanQR />} />
+                
             </Routes>
         </>
     );
