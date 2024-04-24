@@ -27,6 +27,7 @@ function UserUpdateModal(props) {
             phone: props.details ? props.details.phoneNo : "",
             batch: props.details ? props.details.batch : "",
             department: props.details ? props.details.branch : "",
+            enrollment: props.details ? props.details.enrollmentNo : "",
         });
     }, [props.details]);
 
@@ -158,6 +159,20 @@ function UserUpdateModal(props) {
                         />
                         <Form.Control.Feedback type="invalid">
                             Please provide a batch number.
+                        </Form.Control.Feedback>
+                    </Form.Group>
+                    <Form.Group controlId="formDepartment">
+                        <Form.Label>Enrollment</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter enrollment"
+                            name="enrollment"
+                            value={formData.enrollment}
+                            onChange={handleChange}
+                            required
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            Please provide a department.
                         </Form.Control.Feedback>
                     </Form.Group>
 
