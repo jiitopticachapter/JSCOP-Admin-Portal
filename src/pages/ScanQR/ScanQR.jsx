@@ -65,11 +65,11 @@ const ScanQR = () => {
 
         if(response.ok){
             alert("Ticket Verified")
-            console.log("Ticket Verified")
         }
         else{
-            alert("Ticket Not Verified")
-            console.log("Ticket Not Verified")
+            const data = await response.json();
+            alert(data)
+            
         }
     }
 
@@ -87,7 +87,9 @@ const ScanQR = () => {
                     <h2>User College: {user.college}</h2>
                     <h2>User Enrollment No: {user.enrollmentNo}</h2>
                     <button onClick={handleTicketValidation}>Vaidate ticket</button>
-                    {/* <button onClick={() => windows.location.reload()}>Scan Again</button> */}
+                     <br />  
+                     <br />
+                    <button onClick={() => window.location.reload()}>Scan Again</button> 
                 </div>
               </div>
               :
