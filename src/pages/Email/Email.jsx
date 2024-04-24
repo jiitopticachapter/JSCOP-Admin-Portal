@@ -147,13 +147,32 @@ const Email = () => {
       selectedEmails: formData.emails,
     };
 
-    try {
-      const res = await EmailSend(jsonData);
-      alert(JSON.stringify(res.data));
-    } catch (error) {
-      console.error("Can't send :", error);
+    console.log(jsonData)
+
+    const res = await fetch(`${import.meta.env.VITE_LOCALHOST}/sendMail`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(jsonData),
+      credentials: "include",
+    });
+
+    if(res.ok){
+      alert("Email sent successfully");
+    }
+    else{
+      console.error("Can't send :", res.err);
       alert("An error occurred during sending Email. Please try again later.");
     }
+
+    // try {
+    //   const res = await EmailSend(jsonData);
+    //   alert(JSON.stringify(res.data));
+    // } catch (error) {
+    //   console.error("Can't send :", error);
+    //   alert("An error occurred during sending Email. Please try again later.");
+    // }
   };
 
   return (
@@ -226,7 +245,7 @@ const Email = () => {
                             className="selectelements"
                             type="checkbox"
                             onChange={(event) =>
-                              handleCheckboxChange(event, user.name, user.email)
+                              handleCheckboxChange(event, user.email)
                             }
                           />
                         </td>

@@ -11,6 +11,7 @@ import Stack from "react-bootstrap/Stack";
 import Spinner from "react-bootstrap/Spinner";
 import UserVerifyModal from "../../components/Modals/UserVerifyModal";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
     const [modalShowEdit, setModalShowEdit] = useState(false);
@@ -143,6 +144,9 @@ const Dashboard = () => {
                 </Button>
                 <Button variant="primary" onClick={handleUnverifiedUser}>
                     Unverified User
+                </Button>
+                <Button variant="primary">
+                    <Link to='/scanqr' style={{color:'white', textDecoration:'none'}}>Scan Qr</Link>
                 </Button>
             </Stack>
             <Stack

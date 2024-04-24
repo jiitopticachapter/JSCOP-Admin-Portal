@@ -39,6 +39,7 @@ const ScanQR = () => {
 
             if(response.ok){
                 const data = await response.json();
+                setUser(data);
                 console.log(data);
             }
             else{
@@ -53,12 +54,41 @@ const ScanQR = () => {
     }, []);
 
 
+    const handleTicketValidation = async () =>{
+        const response = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/verifyTicket/${scanResult}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include"
+        });
+
+        if(response.ok){
+            alert("Ticket Verified")
+            console.log("Ticket Verified")
+        }
+        else{
+            alert("Ticket Not Verified")
+            console.log("Ticket Not Verified")
+        }
+    }
+
     return (
         <>
             <h1>Qr scan platform</h1>
             {scanResult ? 
               <div>
                 Success : <a href={scanResult} target="_blank">{scanResult}</a>
+                <br />
+                <div>
+                    <h3>User Details: {user.name}</h3>
+                    <h3>User PhoneNo: {user.email}</h3>
+                    <h3>User Phone Number: {user.phoneNo}</h3>
+                    <h2>User College: {user.college}</h2>
+                    <h2>User Enrollment No: {user.enrollmentNo}</h2>
+                    <button onClick={handleTicketValidation}>Vaidate ticket</button>
+                    {/* <button onClick={() => windows.location.reload()}>Scan Again</button> */}
+                </div>
               </div>
               :
               <div id="reader"></div>
