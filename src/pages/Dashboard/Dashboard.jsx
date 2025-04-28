@@ -35,9 +35,8 @@ const Dashboard = () => {
                 // );
                 const config = {
                     headers: {
-                        Authorization: `Bearer ${
-                            JSON.parse(localStorage.getItem("userInfo")).jwt
-                        }`,
+                        Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).jwt
+                            }`,
                     },
                 };
                 const response = await axios.get(`admin/allUsers`, config);
@@ -92,9 +91,8 @@ const Dashboard = () => {
         try {
             const config = {
                 headers: {
-                    Authorization: `Bearer ${
-                        JSON.parse(localStorage.getItem("userInfo")).jwt
-                    }`,
+                    Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).jwt
+                        }`,
                 },
             };
             const res = await axios.post(
@@ -115,7 +113,7 @@ const Dashboard = () => {
                 show={modalShowEdit}
                 onHide={() => setModalShowEdit(false)}
                 details={details} //Pass details to the modal
-                // onUpdate={updateUserDetails} // Pass the update function to the modal
+            // onUpdate={updateUserDetails} // Pass the update function to the modal
             />
             <UserDeleteModal
                 show={modalShowDelete}
@@ -146,7 +144,7 @@ const Dashboard = () => {
                     Unverified User
                 </Button>
                 <Button variant="primary">
-                    <Link to='/scanqr' style={{color:'white', textDecoration:'none'}}>Scan Qr</Link>
+                    <Link to='/scanqr' style={{ color: 'white', textDecoration: 'none' }}>Scan Qr</Link>
                 </Button>
             </Stack>
             <Stack
@@ -174,6 +172,7 @@ const Dashboard = () => {
                             <th>Email</th>
                             <th>Phone</th>
                             <th>College Name</th>
+                            <th>Selected Day</th>
                             <th>Batch</th>
                             <th>Department</th>
                             <th>Hosteller/DayScholar</th>
@@ -191,6 +190,7 @@ const Dashboard = () => {
                                     <td>{user.email}</td>
                                     <td>{user.phoneNo}</td>
                                     <td>JIIT</td>
+                                    <td>{user.selectedDay}</td>
                                     <td>{user.batch}</td>
                                     <td>{user.branch}</td>
                                     <td>{user.enrollmentType}</td>
@@ -205,11 +205,10 @@ const Dashboard = () => {
                                     </td>
                                     <td className="d-flex">
                                         <button
-                                            className={`btn ${
-                                                user.verified
-                                                    ? "btn-success"
-                                                    : "btn-warning"
-                                            } mx-2`}
+                                            className={`btn ${user.verified
+                                                ? "btn-success"
+                                                : "btn-warning"
+                                                } mx-2`}
                                             onClick={() => {
                                                 setDetails(user);
                                                 setModalShowVerify(true);

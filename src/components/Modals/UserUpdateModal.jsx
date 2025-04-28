@@ -9,9 +9,11 @@ function UserUpdateModal(props) {
     const [formData, setFormData] = useState({
         name: props.details ? props.details.name : "",
         email: props.details ? props.details.email : "",
-        phone: props.details ? props.details.phone : "",
+        phoneNo: props.details ? props.details.phoneNo : "",
         batch: props.details ? props.details.batch : "",
-        department: props.details ? props.details.branch : "",
+        branch: props.details ? props.details.branch : "",
+        selectedDay: props.details ? props.details.selectedDay : "",
+
         // name: "",
         // email: "",
         // phone: "",
@@ -24,10 +26,11 @@ function UserUpdateModal(props) {
         setFormData({
             name: props.details ? props.details.name : "",
             email: props.details ? props.details.email : "",
-            phone: props.details ? props.details.phoneNo : "",
+            phoneNo: props.details ? props.details.phoneNo : "",
             batch: props.details ? props.details.batch : "",
-            department: props.details ? props.details.branch : "",
-            enrollment: props.details ? props.details.enrollmentNo : "",
+            branch: props.details ? props.details.branch : "",
+            selectedDay: props.details ? props.details.selectedDay : "",
+            enrollmentNo: props.details ? props.details.enrollmentNo : "",
         });
     }, [props.details]);
 
@@ -40,30 +43,28 @@ function UserUpdateModal(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("formdata", formData);
-        const res = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/user/${props.details._id}`,
-            {
+        try {
+            const res = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/user/${props.details._id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${JSON.parse(localStorage.getItem("userInfo")).jwt}`
                 },
                 credentials: "include",
                 body: JSON.stringify(formData),
             });
-        if (res.status == 200) {
-            console.log("working!!")
-            const data = await res.json();
-            console.log(data);
-            // props.onUpdate(data);
-            // console.log(data);
-            props.onHide();
-            window.location.reload();
 
-
-        } else {
-            console.log("User not updated");
+            if (res.ok) {
+                const data = await res.json();
+                console.log("Update successful:", data);
+                props.onHide();
+                window.location.reload();
+            } else {
+                console.error("Update failed:", await res.text());
+            }
+        } catch (err) {
+            console.error("Error updating user:", err);
         }
-
 
         // event.preventDefault(); // Prevent default form submission
         // // Create updated details object
@@ -138,7 +139,7 @@ function UserUpdateModal(props) {
                             type="tel"
                             placeholder="Enter phone number"
                             name="phone"
-                            value={formData.phone}
+                            value={formData.phoneNo}
                             onChange={handleChange}
                             required
                         />
@@ -161,13 +162,30 @@ function UserUpdateModal(props) {
                             Please provide a batch number.
                         </Form.Control.Feedback>
                     </Form.Group>
+                    <Form.Group controlId="formSelectedDay">
+                        <Form.Label>Selected Day</Form.Label>
+                        <Form.Select
+                            name="selectedDay"
+                            value={formData.selectedDay}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Choose a day</option>
+                            <option value="day1">Day 1</option>
+                            <option value="day2">Day 2</option>
+                            <option value="bothDays">Both Days</option>
+                        </Form.Select>
+                        <Form.Control.Feedback type="invalid">
+                            Please select a day.
+                        </Form.Control.Feedback>
+                    </Form.Group>
                     <Form.Group controlId="formDepartment">
                         <Form.Label>Enrollment</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter enrollment"
                             name="enrollment"
-                            value={formData.enrollment}
+                            value={formData.enrollmentNo}
                             onChange={handleChange}
                             required
                         />
@@ -182,7 +200,7 @@ function UserUpdateModal(props) {
                             type="text"
                             placeholder="Enter department"
                             name="department"
-                            value={formData.department}
+                            value={formData.branch}
                             onChange={handleChange}
                             required
                         />
