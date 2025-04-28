@@ -107,9 +107,8 @@ const Email = () => {
         // );
         const config = {
           headers: {
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("userInfo")).jwt
-            }`,
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).jwt
+              }`,
           },
         };
         const response = await axios.get("/admin/allUsers", config);
@@ -149,19 +148,20 @@ const Email = () => {
 
     console.log(jsonData)
 
-    const res = await fetch(`${import.meta.env.VITE_LOCALHOST}/sendMail`, {
+    const res = await fetch(`${import.meta.env.VITE_LOCALHOST}/sendMail/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${JSON.parse(localStorage.getItem("userInfo")).jwt}`,
       },
       body: JSON.stringify(jsonData),
       credentials: "include",
     });
 
-    if(res.ok){
+    if (res.ok) {
       alert("Email sent successfully");
     }
-    else{
+    else {
       console.error("Can't send :", res.err);
       alert("An error occurred during sending Email. Please try again later.");
     }
