@@ -29,58 +29,86 @@ const ScanQR = () => {
         }
 
         const getUserDetail = async (qrId) => {
-            const userId = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/getQrUser/${qrId}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                // credentials: "include"
-            });
-            console.log(userId);
-
-            // const response = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/getUser/${userId}`, {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            //     credentials: "include"
-            // });
-
-            if (response.ok) {
-                const data = await response.json();
-                setUser(data);
-                console.log(data);
+            console.log("this is getUserDetail function");
+            try {
+                // Step 1: Fetch userId by QR code
+                const userIdResponse = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/getQrUser/${qrId}`, {
+                    method: "GET",   // use GET if your backend expects GET
+                    headers: {
+                        "Content-Type": "application/json",
+                       "Authorization": `Bearer ${JSON.parse(localStorage.getItem("userInfo")).jwt}`
+                    },
+                    credentials: "include"
+                });
+        
+                if (!userIdResponse.ok) {
+                    console.log("QR code not found");
+                    return;
+                }
+        
+                const userIdData = await userIdResponse.json();  // <-- Extract real data
+                console.log("Fetched userId data:", userIdData);
+        
+                // Now assuming userIdData contains something like { userId: "12345" }
+                const userId = userIdData.user;  // adjust according to what your backend sends
+        
+                // Step 2: Fetch full user details using the userId
+                const userResponse = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/user/${userId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    credentials: "include"
+                });
+        
+                if (userResponse.ok) {
+                    const userData = await userResponse.json();
+                    setUser(userData);
+                    console.log("Fetched user data:", userData);
+                } else {
+                    console.log("User not found");
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
             }
-            else {
-                console.log("Not found")
-            }
-
-        }
-
+        };
+        
 
 
     }, []);
 
 
     const handleTicketValidation = async () => {
-        const response = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/verifyTicket/${scanResult}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include"
-        });
-        console.log(response);
-        if (response.ok) {
-            alert("Ticket Verified")
-
+        try {
+            const response = await fetch(`${import.meta.env.VITE_LOCALHOST}/admin/verifyTicket/${scanResult}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${JSON.parse(localStorage.getItem("userInfo")).jwt}`
+                },
+                credentials: "include"
+            });
+    
+            console.log(response);
+    
+            if (response.ok) {
+                alert("Ticket Verified");
+            } else {
+                const data = await response.json();  // ✅ Add await here
+                console.log(data);
+    
+                if (data.message) {
+                    alert(data.message);   // ✅ show backend message
+                } else {
+                    alert("Some error occurred");
+                }
+            }
+        } catch (error) {
+            console.error("Error validating ticket:", error);
+            alert("Something went wrong!");
         }
-        else {
-            const data = await response.json();
-            alert(data)
-
-        }
-    }
+    };
+    
 
     return (
         <>
