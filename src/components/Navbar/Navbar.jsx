@@ -33,9 +33,9 @@ function NavbarComponent() {
                 <Nav.Link as={Link} to="/email">
                   Email
                 </Nav.Link>
-                <Nav.Link as={Link} to="/whatsapp">
+                {/* <Nav.Link as={Link} to="/whatsapp">
                   Whatsapp
-                </Nav.Link>
+                </Nav.Link> */}
               </>
             )}
 
