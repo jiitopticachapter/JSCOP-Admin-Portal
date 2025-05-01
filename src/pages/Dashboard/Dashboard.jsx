@@ -6,12 +6,11 @@ import Button from "react-bootstrap/Button";
 import UserDeleteModal from "../../components/Modals/UserDeleteModal";
 import UserUpdateModal from "../../components/Modals/UserUpdateModal";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Stack from "react-bootstrap/Stack";
 import Spinner from "react-bootstrap/Spinner";
 import UserVerifyModal from "../../components/Modals/UserVerifyModal";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [modalShowEdit, setModalShowEdit] = useState(false);
@@ -29,10 +28,6 @@ const Dashboard = () => {
   useEffect(() => {
     const getFunction = async () => {
       try {
-        // console.log(
-        //     "Token",
-        //     JSON.parse(localStorage.getItem("userInfo"))
-        // );
         const config = {
           headers: {
             Authorization: `Bearer ${
@@ -41,7 +36,6 @@ const Dashboard = () => {
           },
         };
         const response = await axios.get(`admin/allUsers`, config);
-        // console.log("response", response);
         setAllUsers(response.data);
         setUserDetails(response.data);
         setLoading(false);
@@ -51,36 +45,29 @@ const Dashboard = () => {
       }
     };
     setLoading(true);
-    // console.log(response);
     getFunction();
   }, []);
 
-  // Function to update user details
   const updateUserDetails = (updatedDetails) => {
     setUserDetails(
       usersDetails.map((user) => (user === details ? updatedDetails : user))
     );
   };
 
-  const handleUnverifiedUser = (event) => {
-    const newUser = allUsers.filter((user) => {
-      return user.verified == false;
-    });
-    // console.log("newUser", newUser);
+  const handleUnverifiedUser = () => {
+    const newUser = allUsers.filter((user) => !user.verified);
     setUserDetails(newUser);
   };
 
-  const handleVerifiedUser = async (event) => {
-    const newUser = allUsers.filter((user) => {
-      return user.verified == true;
-    });
+  const handleVerifiedUser = () => {
+    const newUser = allUsers.filter((user) => user.verified);
     setUserDetails(newUser);
   };
 
   const searchUser = (event) => {
-    const newUser = allUsers.filter((user) => {
-      return user.name.toLowerCase().includes(event.target.value.toLowerCase());
-    });
+    const newUser = allUsers.filter((user) =>
+      user.name.toLowerCase().includes(event.target.value.toLowerCase())
+    );
     setUserDetails(newUser);
   };
 
@@ -93,21 +80,29 @@ const Dashboard = () => {
           }`,
         },
       };
-      const res = await axios.post(
-        `/admin/sendTicketafterVerification/${id}`,
-        {},
-        config
-      );
+      await axios.post(`/admin/sendTicketafterVerification/${id}`, {}, config);
       toast.success("Ticket Sent Successfully");
-      console.log("After Sending Ticket", res);
     } catch (err) {
       console.log(err);
     }
   };
 
   const handleDayFilter = (day) => {
-    setActiveDay(activeDay === day ? null : day);
-    // In a real implementation, you would filter users based on the selected day
+    if (activeDay === day) {
+      setActiveDay(null);
+      setUserDetails(allUsers);
+    } else {
+      let filteredUsers = [];
+      if (day === "both") {
+        filteredUsers = allUsers.filter((user) => user.selectedDay === "both");
+      } else {
+        filteredUsers = allUsers.filter(
+          (user) => user.selectedDay === day || user.selectedDay === "both"
+        );
+      }
+      setActiveDay(day);
+      setUserDetails(filteredUsers);
+    }
   };
 
   return (
@@ -115,8 +110,7 @@ const Dashboard = () => {
       <UserUpdateModal
         show={modalShowEdit}
         onHide={() => setModalShowEdit(false)}
-        details={details} //Pass details to the modal
-        // onUpdate={updateUserDetails} // Pass the update function to the modal
+        details={details}
       />
       <UserDeleteModal
         show={modalShowDelete}
@@ -129,6 +123,7 @@ const Dashboard = () => {
         allusers={allUsers}
         details={details}
       />
+
       <Stack
         direction="horizontal"
         gap={3}
@@ -149,54 +144,64 @@ const Dashboard = () => {
           </Link>
         </Button>
       </Stack>
+
       <Stack
         direction="horizontal"
         gap={3}
         className="my-2 d-flex justify-content-center"
       >
-        {/* <input
-          type="text"
-          placeholder="Search User"
-          onChange={searchUser}
-          className="form-control w-50"
-        /> */}
         <input
           type="text"
           placeholder="Search User"
-          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          onChange={searchUser}
+          className="w-50 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </Stack>
-      <div className="flex space-x-2 w-full flex gap-4 p-10">
-        <button
-          onClick={() => handleDayFilter(1)}
-          className={`px-4 py-2 rounded-md font-medium transition-all duration-200 shadow-sm ${
-            activeDay === 1
-              ? "bg-blue-600 text-white"
-              : "bg-white text-blue-600 border border-blue-300 hover:bg-blue-50 hover:border-blue-400"
-          }`}
-        >
-          <div className="flex items-center">
-            <span className="mr-1">Day:</span>
-            <span className="font-bold">1</span>
-          </div>
-        </button>
 
+      <div className="d-flex justify-content-center gap-2 flex-wrap mb-4">
         <button
-          onClick={() => handleDayFilter(2)}
+          onClick={() => handleDayFilter("day1")}
           className={`px-4 py-2 rounded-md font-medium transition-all duration-200 shadow-sm ${
-            activeDay === 2
+            activeDay === "day1"
               ? "bg-blue-600 text-white"
               : "bg-white text-blue-600 border border-blue-300 hover:bg-blue-50 hover:border-blue-400"
           }`}
         >
-          <div className="flex items-center">
-            <span className="mr-1">Day:</span>
-            <span className="font-bold">2</span>
-          </div>
+          Day 1
+        </button>
+        <button
+          onClick={() => handleDayFilter("day2")}
+          className={`px-4 py-2 rounded-md font-medium transition-all duration-200 shadow-sm ${
+            activeDay === "day2"
+              ? "bg-blue-600 text-white"
+              : "bg-white text-blue-600 border border-blue-300 hover:bg-blue-50 hover:border-blue-400"
+          }`}
+        >
+          Day 2
+        </button>
+        <button
+          onClick={() => handleDayFilter("both")}
+          className={`px-4 py-2 rounded-md font-medium transition-all duration-200 shadow-sm ${
+            activeDay === "both"
+              ? "bg-blue-600 text-white"
+              : "bg-white text-blue-600 border border-blue-300 hover:bg-blue-50 hover:border-blue-400"
+          }`}
+        >
+          Both Days
+        </button>
+        <button
+          onClick={() => {
+            setActiveDay(null);
+            setUserDetails(allUsers);
+          }}
+          className="px-4 py-2 rounded-md font-medium transition-all duration-200 shadow-sm bg-red-100 text-red-700 border border-red-300 hover:bg-red-200"
+        >
+          Reset Filters
         </button>
       </div>
+
       {loading ? (
-        <div className="d-flex justify-content-center align-items-center  w-100 my-8">
+        <div className="d-flex justify-content-center align-items-center w-100 my-8">
           <Spinner animation="border" variant="primary" />
         </div>
       ) : (
@@ -218,65 +223,62 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {usersDetails.map((user, index) => {
-              return (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phoneNo}</td>
-                  <td>JIIT</td>
-                  <td>{user.selectedDay}</td>
-                  <td>{user.batch}</td>
-                  <td>{user.branch}</td>
-                  <td>{user.enrollmentType}</td>
-                  <td>{user.enrollmentNo}</td>
-                  <td>
-                    <a href={user.payment.url} target="_blank">
-                      Photo
-                    </a>
-                  </td>
-                  <td className="d-flex">
-                    <button
-                      className={`btn ${
-                        user.verified ? "btn-success" : "btn-warning"
-                      } mx-2`}
-                      onClick={() => {
-                        setDetails(user);
-                        setModalShowVerify(true);
-                      }}
-                    >
-                      {user.verified ? "Verified" : "Verify"}
-                    </button>
-                    <button
-                      className="btn btn-primary me-2"
-                      onClick={() => {
-                        setDetails(user);
-                        setModalShowEdit(true);
-                      }}
-                    >
-                      <MdOutlineEdit />
-                    </button>
-                    <br></br>
-                    <button
-                      className="btn btn-danger me-2"
-                      onClick={() => {
-                        setDetails(user);
-                        setModalShowDelete(true);
-                      }}
-                    >
-                      <MdDelete />
-                    </button>
-                    <button
-                      className="btn btn-secondary me2"
-                      onClick={() => handleSendTicket(user._id)}
-                    >
-                      Send Ticket
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            {usersDetails.map((user, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.phoneNo}</td>
+                <td>JIIT</td>
+                <td>{user.selectedDay}</td>
+                <td>{user.batch}</td>
+                <td>{user.branch}</td>
+                <td>{user.enrollmentType}</td>
+                <td>{user.enrollmentNo}</td>
+                <td>
+                  <a href={user.payment.url} target="_blank" rel="noreferrer">
+                    Photo
+                  </a>
+                </td>
+                <td className="d-flex">
+                  <button
+                    className={`btn ${
+                      user.verified ? "btn-success" : "btn-warning"
+                    } mx-2`}
+                    onClick={() => {
+                      setDetails(user);
+                      setModalShowVerify(true);
+                    }}
+                  >
+                    {user.verified ? "Verified" : "Verify"}
+                  </button>
+                  <button
+                    className="btn btn-primary me-2"
+                    onClick={() => {
+                      setDetails(user);
+                      setModalShowEdit(true);
+                    }}
+                  >
+                    <MdOutlineEdit />
+                  </button>
+                  <button
+                    className="btn btn-danger me-2"
+                    onClick={() => {
+                      setDetails(user);
+                      setModalShowDelete(true);
+                    }}
+                  >
+                    <MdDelete />
+                  </button>
+                  <button
+                    className="btn btn-secondary me2"
+                    onClick={() => handleSendTicket(user._id)}
+                  >
+                    Send Ticket
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       )}
