@@ -9,8 +9,12 @@ function UserDeleteModal(props) {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("userInfo")).jwt
+                  }`,
             },
             credentials: "include",
+           
 
         }).then(() => {
             console.log("deleting!!");
